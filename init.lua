@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -117,6 +117,14 @@ vim.opt.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.opt.breakindent = true
+
+-- Save all buffer
+vim.keymap.set('n', '<leader>wa', ':wall<CR>', { noremap = true, desc = '[W]rite [A]ll' })
+vim.keymap.set('n', '<leader>wf', ':w<CR>', { noremap = true, desc = '[W]rite [F]ile' })
+
+vim.keymap.set('n', '[c', function()
+  require('treesitter-context').go_to_context(vim.v.count1)
+end, { silent = true })
 
 -- Save undo history
 vim.opt.undofile = true
@@ -252,6 +260,7 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
+      current_line_blame = true,
     },
   },
 
@@ -371,6 +380,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set('n', '<leader>st', builtin.git_status, { desc = '[S]earch git s[T]atus' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
@@ -481,9 +491,13 @@ require('lazy').setup({
 
           -- Rename the variable under your cursor
           --  Most Language Servers support renaming across files, etc.
-          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('<leaer>rn', function()
+            vim.lsp.buf.rename()
+            -- save all buffers after rename
+            vim.cmd 'silent! wa'
+          end, '[R]e[n]ame')
 
-          -- Execute a code action, usually your cursor needs to be on top of an error
+          -- Execute a coe action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -585,6 +599,41 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'autoflake',
+        'autopep8',
+        'awk-language-server',
+        'azure-pipelines-language-server',
+        'bash-debug-adapter',
+        'bash-language-server',
+        'bicep-lsp',
+        'black',
+        'codelldb',
+        'codespell',
+        'debugpy',
+        'dockerfile-language-server',
+        'helm-ls',
+        'html-lsp',
+        'jq',
+        'json-lsp',
+        'jsonlint',
+        'jsonnet-language-server',
+        'lua-language-server',
+        'mypy',
+        'powershell-editor-services',
+        'prettier',
+        'pyright',
+        'ruff',
+        'rust-analyzer',
+        'shellcheck',
+        'terraform-ls',
+        'tflint',
+        'tree-sitter-cli',
+        'trivy',
+        'yaml-language-server',
+        'yamlfix',
+        'yamlfmt',
+        'yamllint',
+        'ruff', -- Used to format lua code
         'stylua', -- Used to format lua code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -615,11 +664,14 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
+        javascript = { { 'prettierd', 'prettier' } },
+        json = { 'jsonlint' },
+        markdown = { 'markdownlint' },
+        python = { 'ruff', 'isort', 'black' },
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        yaml = { 'yamllint' },
       },
     },
   },
@@ -785,7 +837,7 @@ require('lazy').setup({
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'terraform', 'vim', 'vimdoc', 'yaml' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
