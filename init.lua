@@ -306,6 +306,28 @@ require('lazy').setup({
     end,
   },
 
+  -- {{{ copilot
+  {
+    'github/copilot.vim',
+    lazy = false,
+    config = function()
+      -- Mapping tab is already used by NvChad
+      vim.g.copilot_no_tab_map = true
+      vim.g.copilot_assume_mapped = true
+      vim.g.copilot_tab_fallback = ''
+      -- The mapping is set to other key, see custom/lua/mappings
+      -- or run <leader>ch to see copilot mapping section
+      -- vim.keymap.set(
+      --   'i',
+      --   '<C-r>',
+      --   'copilot#Accept("<CR>")',
+      --   {
+      --     expr = true,
+      --     replace_keycodes = false,
+      --   })
+    end,
+  },
+  -- }}}
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
