@@ -243,36 +243,10 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- fugitive.vim - Premier Git plugin for vim
-  {
-    'tpope/vim-fugitive',
-    -- ft = { 'fugitive' },
-    cmd = {
-      'G',
-      'GBrowse',
-      'GMove',
-      'Gclog',
-      'GDelete',
-      'Gdiff',
-      'Gdiffsplit',
-      'Gedit',
-      'Ggrep',
-      'Ghdiffsplit',
-      'Git',
-      'Glgrep',
-      'Gread',
-      'Gremove',
-      'Gsplit',
-      'Gvdiffsplit',
-      'Gwrite',
-    },
-    config = {},
-    opts = {},
-  },
+  'tpope/vim-fugitive',
 
   -- rhubarb
-  {
-    'tpope/vim-rhubarb',
-  },
+  'tpope/vim-rhubarb',
 
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
