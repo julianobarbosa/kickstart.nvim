@@ -122,6 +122,10 @@ vim.opt.breakindent = true
 vim.keymap.set('n', '<leader>wa', ':wall<CR>', { noremap = true, desc = '[W]rite [A]ll' })
 vim.keymap.set('n', '<leader>wf', ':w<CR>', { noremap = true, desc = '[W]rite [F]ile' })
 
+-- Navigate buffers
+vim.keymap.set('n', '<S-h>', ':bp<CR>', { noremap = true, desc = '[G]oto [P]previous Buffer' })
+vim.keymap.set('n', '<S-l>', ':bn<CR>', { noremap = true, desc = '[G]oto [N]ext Buffer' })
+
 vim.keymap.set('n', '[c', function()
   require('treesitter-context').go_to_context(vim.v.count1)
 end, { silent = true })
@@ -268,6 +272,38 @@ require('lazy').setup({
       },
       current_line_blame = true,
     },
+  },
+
+  -- nvim-dap
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
+  },
+  'mfussenegger/nvim-dap',
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function(_, opts)
+      local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
+    end,
   },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
@@ -606,6 +642,7 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'azure-pipelines-language-server',
         'autoflake',
         'autopep8',
         'awk-language-server',
@@ -632,6 +669,7 @@ require('lazy').setup({
         'ruff',
         'rust-analyzer',
         'shellcheck',
+        'stylua', -- Used to format lua code
         'terraform-ls',
         'tflint',
         'tree-sitter-cli',
@@ -640,8 +678,7 @@ require('lazy').setup({
         'yamlfix',
         'yamlfmt',
         'yamllint',
-        'ruff', -- Used to format lua code
-        'stylua', -- Used to format lua code
+        'yq',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -844,7 +881,34 @@ require('lazy').setup({
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'terraform', 'vim', 'vimdoc', 'yaml' },
+        ensure_installed = {
+          'awk',
+          'bash',
+          'bicep',
+          'c',
+          'comment',
+          'css',
+          'dockerfile',
+          'go',
+          'hcl',
+          'html',
+          'javascript',
+          'jq',
+          'json',
+          'jsonnet',
+          'lua',
+          'markdown',
+          'markdown_inline',
+          'python',
+          'query',
+          'rust',
+          'terraform',
+          'tsx',
+          'typescript',
+          'vim',
+          'vimdoc',
+          'yaml',
+        },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
