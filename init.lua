@@ -242,6 +242,38 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
+  -- fugitive.vim - Premier Git plugin for vim
+  {
+    'tpope/vim-fugitive',
+    -- ft = { 'fugitive' },
+    cmd = {
+      'G',
+      'GBrowse',
+      'GMove',
+      'Gclog',
+      'GDelete',
+      'Gdiff',
+      'Gdiffsplit',
+      'Gedit',
+      'Ggrep',
+      'Ghdiffsplit',
+      'Git',
+      'Glgrep',
+      'Gread',
+      'Gremove',
+      'Gsplit',
+      'Gvdiffsplit',
+      'Gwrite',
+    },
+    config = {},
+    opts = {},
+  },
+
+  -- rhubarb
+  {
+    'tpope/vim-rhubarb',
+  },
+
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
 
@@ -546,9 +578,10 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
+        clangd = {},
+        gopls = {},
+        pyright = {},
+        ruff = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -556,7 +589,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        tsserver = {},
         --
 
         lua_ls = {
