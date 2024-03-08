@@ -766,16 +766,28 @@ require('lazy').setup({
         lsp_fallback = true,
       },
       formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        javascript = { { 'prettierd', 'prettier' } },
-        json = { 'jsonlint' },
-        markdown = { 'markdownlint' },
-        python = { 'ruff', 'isort', 'black' },
         --
+        -- Conform can also run multiple formatters sequentially
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
+        go = { 'goimports', 'gofmt' },
+        javascript = { { 'prettierd', 'prettier' } },
+        json = { 'jsonlint' },
+        lua = { 'stylua' },
+        markdown = { 'markdownlint' },
+        python = function(bufnr)
+          if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            return { "ruff_format" }
+          else
+            return { "isort", "black" }
+          end
+        end,
         yaml = { 'yamllint' },
+        -- Use the "*" filetype to run formatters on all filetypes.
+        ["*"] = { "codespell" },
+        -- Use the "_" filetype to run formatters on filetypes that don't
+        -- have other formatters configured.
+        ["_"] = { "trim_whitespace" },
       },
     },
   },
