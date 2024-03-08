@@ -366,6 +366,23 @@ require('lazy').setup({
   },
   -- }}}
 
+  -- {{{ autopairing of (){}[] etc
+  {
+    'windwp/nvim-autopairs',
+    opts = {
+      fast_wrap = {},
+      disable_filetype = { 'TelescopePrompt', 'vim' },
+    },
+    config = function(_, opts)
+      require('nvim-autopairs').setup(opts)
+
+      -- setup cmp for autopairs
+      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+      require('cmp').event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
+  -- }}}
+
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -776,18 +793,18 @@ require('lazy').setup({
         lua = { 'stylua' },
         markdown = { 'markdownlint' },
         python = function(bufnr)
-          if require("conform").get_formatter_info("ruff_format", bufnr).available then
-            return { "ruff_format" }
+          if require('conform').get_formatter_info('ruff_format', bufnr).available then
+            return { 'ruff_format' }
           else
-            return { "isort", "black" }
+            return { 'isort', 'black' }
           end
         end,
         yaml = { 'yamllint' },
         -- Use the "*" filetype to run formatters on all filetypes.
-        ["*"] = { "codespell" },
+        ['*'] = { 'codespell' },
         -- Use the "_" filetype to run formatters on filetypes that don't
         -- have other formatters configured.
-        ["_"] = { "trim_whitespace" },
+        ['_'] = { 'trim_whitespace' },
       },
     },
   },
