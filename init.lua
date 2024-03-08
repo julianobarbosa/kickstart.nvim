@@ -270,6 +270,38 @@ require('lazy').setup({
     },
   },
 
+  -- nvim-dap
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
+  },
+  'mfussenegger/nvim-dap',
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function(_, opts)
+      local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
+    end,
+  },
+
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -606,6 +638,7 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'azure-pipelines-language-server',
         'autoflake',
         'autopep8',
         'awk-language-server',
@@ -632,6 +665,7 @@ require('lazy').setup({
         'ruff',
         'rust-analyzer',
         'shellcheck',
+        'stylua', -- Used to format lua code
         'terraform-ls',
         'tflint',
         'tree-sitter-cli',
@@ -640,8 +674,7 @@ require('lazy').setup({
         'yamlfix',
         'yamlfmt',
         'yamllint',
-        'ruff', -- Used to format lua code
-        'stylua', -- Used to format lua code
+        'yq',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
