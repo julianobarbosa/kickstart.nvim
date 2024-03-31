@@ -122,6 +122,11 @@ vim.opt.breakindent = true
 vim.keymap.set('n', '<leader>wa', ':wall<CR>', { noremap = true, desc = '[W]rite [A]ll' })
 vim.keymap.set('n', '<leader>wf', ':w<CR>', { noremap = true, desc = '[W]rite [F]ile' })
 
+-- Create command do save with qw
+vim.api.nvim_command 'cmap qw wq'
+vim.api.nvim_command 'cmap WQ wq'
+vim.api.nvim_command 'cmap QW wq'
+
 -- Navigate buffers
 vim.keymap.set('n', '<S-h>', ':bp<CR>', { noremap = true, desc = '[G]oto [P]previous Buffer' })
 vim.keymap.set('n', '<S-l>', ':bn<CR>', { noremap = true, desc = '[G]oto [N]ext Buffer' })
@@ -317,14 +322,10 @@ require('lazy').setup({
       vim.g.copilot_tab_fallback = ''
       -- The mapping is set to other key, see custom/lua/mappings
       -- or run <leader>ch to see copilot mapping section
-      -- vim.keymap.set(
-      --   'i',
-      --   '<C-r>',
-      --   'copilot#Accept("<CR>")',
-      --   {
-      --     expr = true,
-      --     replace_keycodes = false,
-      --   })
+      vim.keymap.set('i', '<C-y>', 'copilot#Accept("<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+      })
     end,
   },
   -- }}}
@@ -838,7 +839,7 @@ require('lazy').setup({
       --    you can use this plugin to help you. It even has snippets
       --    for various frameworks/libraries/etc. but you will have to
       --    set up the ones that are useful for you.
-      -- 'rafamadriz/friendly-snippets',
+      'rafamadriz/friendly-snippets',
     },
     config = function()
       -- See `:help cmp`
