@@ -84,6 +84,12 @@ I hope you enjoy your Neovim journey,
 P.S. You can delete this when you're done too. It's your config now! :)
 --]]
 
+-- Set aider shortcuts
+-- set a keybinding for the AiderOpen function
+vim.api.nvim_set_keymap('n', '<leader>oa', '<cmd>lua AiderOpen()<cr>', { noremap = true, silent = true })
+-- set a keybinding for the AiderBackground function
+vim.api.nvim_set_keymap('n', '<leader>ob', '<cmd>lua AiderBackground()<cr>', { noremap = true, silent = true })
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -300,88 +306,12 @@ require('lazy').setup({
     dependencies = {
       'mfussenegger/nvim-dap',
       'rcarriga/nvim-dap-ui',
+      'nvim-neotest/nvim-nio',
     },
     config = function(_, opts)
       local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
     end,
   },
-
-  -- {{{ copilot
-  {
-    'github/copilot.vim',
-    lazy = false,
-    config = function()
-      -- Mapping tab is already used by NvChad
-      vim.g.copilot_no_tab_map = true
-      vim.g.copilot_assume_mapped = true
-      vim.g.copilot_tab_fallback = ''
-      -- The mapping is set to other key, see custom/lua/mappings
-      -- or run <leader>ch to see copilot mapping section
-      -- vim.keymap.set(
-      --   'i',
-      --   '<C-r>',
-      --   'copilot#Accept("<CR>")',
-      --   {
-      --     expr = true,
-      --     replace_keycodes = false,
-      --   })
-    end,
-  },
-  -- }}}
-
-  -- {{{ gp.nvim
-  {
-    'robitx/gp.nvim',
-    config = function()
-      require('gp').setup {
-        cmd_prefix = 'Gp',
-        openai_api_key = os.getenv 'OPENAI_API_KEY',
-        openai_api_endpoint = os.getenv 'OPENAI_API_BASE_FULL',
-      }
-    end,
-    cmd = {
-      'GpChatNew',
-      'GpRewrite',
-      'GpAppend',
-      'GpPrepend',
-      'GpEnew',
-      'GpPopup',
-    },
-    lazy = true,
-  },
-  -- }}}
-
-  -- {{{ ChatGPT.nvim
-  {
-    'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
-    config = function()
-      require('chatgpt').setup()
-    end,
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-  },
-  -- }}}
-
-  -- {{{ autopairing of (){}[] etc
-  {
-    'windwp/nvim-autopairs',
-    opts = {
-      fast_wrap = {},
-      disable_filetype = { 'TelescopePrompt', 'vim' },
-    },
-    config = function(_, opts)
-      require('nvim-autopairs').setup(opts)
-
-      -- setup cmp for autopairs
-      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
-      require('cmp').event:on('confirm_done', cmp_autopairs.on_confirm_done())
-    end,
-  },
-  -- }}}
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
   --
@@ -1023,13 +953,14 @@ require('lazy').setup({
   --
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.codegpt',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you have a Nerd Font, set icons to an empty table which will use the
