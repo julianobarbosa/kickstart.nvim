@@ -609,13 +609,6 @@ require('lazy').setup({
         tsserver = {},
         --
 
-        yaml = {
-          settings = {
-            yaml = {
-              schemas = { kubernetes = "*.yml" },
-            },
-          },
-        },
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
