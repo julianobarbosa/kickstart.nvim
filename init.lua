@@ -255,6 +255,9 @@ require('lazy').setup({
   --  This is equivalent to:
   --    require('Comment').setup({})
 
+  -- SchemaStore.nvim
+  'b0o/schemastore.nvim',
+
   -- fugitive.vim - Premier Git plugin for vim
   'tpope/vim-fugitive',
 
@@ -629,6 +632,25 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
+        jsonls = {
+          schemas = require('schemastore').json.schemas {
+            extra = {
+              {
+                description = 'My custom JSON schema',
+                fileMatch = 'foo.json',
+                name = 'foo.json',
+                url = 'https://example.com/schema/foo.json',
+              },
+              {
+                description = 'My other custom JSON schema',
+                fileMatch = { 'bar.json', '.baar.json' },
+                name = 'bar.json',
+                url = 'https://example.com/schema/bar.json',
+              },
+            },
+          },
+          validate = { enable = true },
+        },
         gopls = {},
         pyright = {},
         ruff = {},
@@ -653,6 +675,22 @@ require('lazy').setup({
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
               -- diagnostics = { disable = { 'missing-fields' } },
+            },
+          },
+        },
+        yamlls = {
+          settings = {
+            yaml = {
+              format = {
+                enable = true,
+              },
+              schemaStore = {
+                -- You must disable built-in schemaStore support if you want to use
+                -- this plugin and its advanced options like `ignore`.
+                enable = false,
+                url = '',
+              },
+              schemas = require('schemastore').yaml.schemas(),
             },
           },
         },
@@ -1028,6 +1066,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  -- require('user.additional-schemas').init(),
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
