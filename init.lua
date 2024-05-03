@@ -629,30 +629,60 @@ require('lazy').setup({
       --  - filetypes (table): Override the default list of associated filetypes for the server
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
-      --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      --  For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        bashls = {
+          filetypes = { 'sh', 'zsh' },
+          settings = {
+            bash = {
+              filetypes = { 'sh', 'zsh' },
+            },
+          },
+        },
         clangd = {},
+        dockerls = {
+          filetypes = { 'Dockerfile', 'dockerfile' },
+        },
+        html = {
+          cmd = { 'html-languageserver', '--stdio' },
+          filetypes = { 'html' },
+        },
         jsonls = {
           schemas = require('schemastore').json.schemas {
             extra = {
-              {
-                description = 'My custom JSON schema',
-                fileMatch = 'foo.json',
-                name = 'foo.json',
-                url = 'https://example.com/schema/foo.json',
-              },
-              {
-                description = 'My other custom JSON schema',
-                fileMatch = { 'bar.json', '.baar.json' },
-                name = 'bar.json',
-                url = 'https://example.com/schema/bar.json',
-              },
+              -- {
+              --   description = 'My custom JSON schema',
+              --   fileMatch = 'foo.json',
+              --   name = 'foo.json',
+              --   url = 'https://example.com/schema/foo.json',
+              -- },
+              -- {
+              --   description = 'My other custom JSON schema',
+              --   fileMatch = { 'bar.json', '.baar.json' },
+              --   name = 'bar.json',
+              --   url = 'https://example.com/schema/bar.json',
+              -- },
             },
           },
           validate = { enable = true },
         },
         gopls = {},
-        pyright = {},
+        marksman = {},
+        pyright = {
+          cmd = { 'pyright-langserver', '--stdio' },
+          filetypes = { 'python' },
+          root_dir = require('lspconfig/util').root_pattern('.git', vim.fn.getcwd()),
+          settings = {
+            python = {
+              venvPath = '~/.pyenv/versions/3.12.3/bin/python',
+              analysis = {
+                autoSearchPaths = true,
+                diagnosticMode = 'workspace',
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
         ruff = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -661,6 +691,16 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
+        tflint = {
+          filetypes = { 'hcl', 'tf', 'tfvars' },
+          settings = {
+            tflint = {
+              arguments = {
+                '--format', 'json',
+              },
+            },
+          },
+        },
         tsserver = {},
         --
 
@@ -678,17 +718,35 @@ require('lazy').setup({
             },
           },
         },
+
+        vimls = {
+          filetypes = { 'vim' }
+        },
+
         yamlls = {
+          -- on_attach = require('completion').on_attach,
           settings = {
+            redhat = {
+              telemetry = {
+                enable = false
+              },
+            },
+
             yaml = {
+              validate = true,
               format = {
                 enable = true,
               },
+              hover = true,
               schemaStore = {
                 -- You must disable built-in schemaStore support if you want to use
                 -- this plugin and its advanced options like `ignore`.
                 enable = false,
                 url = '',
+              },
+              schemaDownload = {
+                enable = true,
+                enableTelemetry = false,
               },
               schemas = require('schemastore').yaml.schemas(),
             },

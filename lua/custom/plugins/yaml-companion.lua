@@ -1,7 +1,17 @@
 return {
   {
     'someone-stole-my-name/yaml-companion.nvim',
-    ft = { 'yaml' },
+    ft = {
+      'yaml',
+      'yml',
+    },
+    opts = {
+      builtins_matchers = {
+        kubernetes = { enabled = true },
+        cloud_init = { enabled = true },
+        helm = { enabled = true },
+      },
+    },
     dependencies = {
       { 'neovim/nvim-lspconfig' },
       { 'nvim-lua/plenary.nvim' },
