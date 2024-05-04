@@ -645,14 +645,18 @@ require('lazy').setup({
             },
           },
         },
+
         clangd = {},
+
         dockerls = {
           filetypes = { 'Dockerfile', 'dockerfile' },
         },
+
         html = {
           cmd = { 'html-languageserver', '--stdio' },
           filetypes = { 'html' },
         },
+
         jsonls = {
           schemas = require('schemastore').json.schemas {
             extra = {
@@ -672,8 +676,39 @@ require('lazy').setup({
           },
           validate = { enable = true },
         },
+
         gopls = {},
+
+        lua_ls = {
+          cmd = { 'lua-language-server' },
+          filetypes = { 'lua' },
+          settings = {
+            Lua = {
+              completion = {
+                callSnippet = 'Replace',
+              },
+              diagnostics = {
+                enable = true,
+                disable = { 'missing-fields' },
+                globals = { 'vim' },
+              },
+              runtime = {
+                version = 'LuaJIT',
+                path = vim.split(package.path, ';'),
+              },
+              workspace = {
+                checkThirdParty = false,
+                library = vim.api.nvim_get_runtime_file('', true),
+              },
+              telemetry = {
+                enable = false,
+              },
+            },
+          },
+        },
+
         marksman = {},
+
         pyright = {
           cmd = { 'pyright-langserver', '--stdio' },
           filetypes = { 'python' },
