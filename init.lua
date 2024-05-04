@@ -737,7 +737,8 @@ require('lazy').setup({
           settings = {
             tflint = {
               arguments = {
-                '--format', 'json',
+                '--format',
+                'json',
               },
             },
           },
@@ -761,22 +762,28 @@ require('lazy').setup({
         },
 
         vimls = {
-          filetypes = { 'vim' }
+          filetypes = { 'vim' },
         },
 
         yamlls = {
           -- on_attach = require('completion').on_attach,
+          on_attach = require('cmp_nvim_lsp').on_attach,
+          capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
           settings = {
             redhat = {
               telemetry = {
-                enable = false
+                enable = false,
               },
             },
 
             yaml = {
+              completion = true,
               validate = true,
               format = {
                 enable = true,
+                singleQuote = true,
+                bracketSpacing = true,
+                printWidth = 120,
               },
               hover = true,
               schemaStore = {
@@ -789,7 +796,17 @@ require('lazy').setup({
                 enable = true,
                 enableTelemetry = false,
               },
-              schemas = require('schemastore').yaml.schemas(),
+              schemas = {
+                -- {
+                --   fileMatch = { '*/.github/workflows/*.yml' },
+                --   url = 'https://json.schemastore.org/github-workflow',
+                -- },
+                -- {
+                --   fileMatch = { '.openapi.yaml' },
+                --   url = 'file:///[...]:/openai.schema.yaml',
+                -- },
+                require('schemastore').yaml.schemas(),
+              },
             },
           },
         },
@@ -807,7 +824,6 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'azure-pipelines-language-server',
         'autoflake',
         'autopep8',
         'awk-language-server',
@@ -820,29 +836,39 @@ require('lazy').setup({
         'codespell',
         'debugpy',
         'dockerfile-language-server',
+        'goimports',
+        'hclfmt',
         'helm-ls',
         'html-lsp',
         'jq',
+        'isort',
         'json-lsp',
-        'jsonlint',
         'jsonnet-language-server',
+        'jsonlint',
         'lua-language-server',
+        'luaformatter',
+        'markdownlint',
         'mypy',
         'powershell-editor-services',
         'prettier',
+        'prettierd',
         'pyright',
         'ruff',
         'rust-analyzer',
         'shellcheck',
+        'sql-formatter',
         'stylua', -- Used to format lua code
         'terraform-ls',
         'tflint',
         'tree-sitter-cli',
         'trivy',
+        'usort',
+        'xmlformatter',
         'yaml-language-server',
         'yamlfix',
         'yamlfmt',
         'yamllint',
+        'yapf',
         'yq',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
