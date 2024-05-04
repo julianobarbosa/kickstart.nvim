@@ -205,6 +205,49 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 -- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
 -- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
+-- TIP: with you use which-key, you can add a description to these keymaps
+-- See `:help which-key` for more information
+vim.keymap.set('n', '<C-h>', '<cmd>TmuxNavigateLeft<CR>', { desc = 'Move focus to the left pane' })
+vim.keymap.set('n', '<C-j>', '<cmd>TmuxNavigateDown<CR>', { desc = 'Move focus to the pane below' })
+vim.keymap.set('n', '<C-k>', '<cmd>TmuxNavigateUp<CR>', { desc = 'Move focus to the pane above' })
+vim.keymap.set('n', '<C-l>', '<cmd>TmuxNavigateRight<CR>', { desc = 'Move focus to the right pane' })
+vim.keymap.set('n', '<C-\\>', '<cmd>TmuxNavigatePrevious<CR>', { desc = 'Move focus to the previous pane' })
+vim.keymap.set('n', '<C-]>', '<cmd>TmuxNavigateNext<CR>', { desc = 'Move focus to the next pane' })
+vim.keymap.set('n', '<C-^>', '<cmd>TmuxNavigateLast<CR>', { desc = 'Move focus to the last pane' })
+vim.keymap.set('n', '<C-1>', '<cmd>TmuxNavigateWindow1<CR>', { desc = 'Move focus to window 1' })
+vim.keymap.set('n', '<C-2>', '<cmd>TmuxNavigateWindow2<CR>', { desc = 'Move focus to window 2' })
+vim.keymap.set('n', '<C-3>', '<cmd>TmuxNavigateWindow3<CR>', { desc = 'Move focus to window 3' })
+vim.keymap.set('n', '<C-4>', '<cmd>TmuxNavigateWindow4<CR>', { desc = 'Move focus to window 4' })
+vim.keymap.set('n', '<C-5>', '<cmd>TmuxNavigateWindow5<CR>', { desc = 'Move focus to window 5' })
+vim.keymap.set('n', '<C-6>', '<cmd>TmuxNavigateWindow6<CR>', { desc = 'Move focus to window 6' })
+vim.keymap.set('n', '<C-7>', '<cmd>TmuxNavigateWindow7<CR>', { desc = 'Move focus to window 7' })
+vim.keymap.set('n', '<C-8>', '<cmd>TmuxNavigateWindow8<CR>', { desc = 'Move focus to window 8' })
+vim.keymap.set('n', '<C-9>', '<cmd>TmuxNavigateWindow9<CR>', { desc = 'Move focus to window 9' })
+vim.keymap.set('n', '<C-0>', '<cmd>TmuxNavigateWindow10<CR>', { desc = 'Move focus to window 10' })
+vim.keymap.set('n', '<C-w>', '<cmd>TmuxNavigatePrevious<CR>', { desc = 'Move focus to the previous pane' })
+vim.keymap.set('n', '<C-t>', '<cmd>TmuxNavigateLast<CR>', { desc = 'Move focus to the last pane' })
+--
+-- TIP: If you want to use these keymaps in tmux, you need to add the following lines to your tmux.conf
+-- bind -n C-h run "tmux select-pane -L"
+-- bind -n C-j run "tmux select-pane -D"
+-- bind -n C-k run "tmux select-pane -U"
+-- bind -n C-l run "tmux select-pane -R"
+-- bind -n C-\ run "tmux select-pane -l"
+-- bind -n C-] run "tmux select-pane -t :.+"
+-- bind -n C-^ run "tmux select-pane -l"
+-- bind -n C-1 run "tmux select-window -t 1"
+-- bind -n C-2 run "tmux select-window -t 2"
+-- bind -n C-3 run "tmux select-window -t 3"
+-- bind -n C-4 run "tmux select-window -t 4"
+-- bind -n C-5 run "tmux select-window -t 5"
+-- bind -n C-6 run "tmux select-window -t 6"
+-- bind -n C-7 run "tmux select-window -t 7"
+-- bind -n C-8 run "tmux select-window -t 8"
+-- bind -n C-9 run "tmux select-window -t 9"
+-- bind -n C-0 run "tmux select-window -t 10"
+-- bind -n C-w run "tmux select-pane -l"
+-- bind -n C-t run "tmux select-pane -l"
+--
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
