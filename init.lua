@@ -177,6 +177,12 @@ vim.opt.scrolloff = 10
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
+
+-- Set python3 as the default python
+-- This is useful for things like LSPs that require python3
+-- See `:help g:python3_host_prog`
+vim.g.python3_host_prog = '~/.pyenv/versions/neovim3/bin/python3'
+
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
