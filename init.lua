@@ -96,6 +96,48 @@ vim.api.nvim_set_keymap('n', '<leader>ob', '<cmd>lua AiderBackground()<cr>', { n
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- copilot configuration
+-- Set the keybinding for the copilot function
+vim.g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("<CR>")', { silent = true, expr = true })
+vim.api.nvim_set_keymap('i', '<C-H>', 'copilot#Previous()', { silent = true, expr = true })
+vim.api.nvim_set_keymap('i', '<C-K>', 'copilot#Next()', { silent = true, expr = true })
+vim.api.nvim_set_keymap('n', '<leader>oc', '<cmd>lua CopilotOpen()<cr>', { noremap = true, silent = true })
+vim.g.copilot_filetypes = {
+  ['*'] = false,
+  ['bash'] = true,
+  ['c'] = true,
+  ['c++'] = true,
+  ['cmake'] = true,
+  ['css'] = true,
+  ['dockerfile'] = true,
+  ['fish'] = true,
+  ['go'] = true,
+  ['graphql'] = true,
+  ['graphqls'] = true,
+  ['html'] = true,
+  ['java'] = true,
+  ['javascrip'] = true,
+  ['javascriptreact'] = true,
+  ['json'] = true,
+  ['lua'] = true,
+  ['make'] = true,
+  ['markdown'] = true,
+  ['perl'] = true,
+  ['php'] = true,
+  ['python'] = true,
+  ['ruby'] = true,
+  ['rust'] = true,
+  ['scss'] = true,
+  ['sh'] = true,
+  ['sql'] = true,
+  ['typescript'] = true,
+  ['typescriptreact'] = true,
+  ['vim'] = true,
+  ['yaml'] = true,
+  ['zsh'] = true,
+}
+--
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -720,8 +762,6 @@ require('lazy').setup({
           validate = { enable = true },
         },
 
-        gopls = {},
-
         lua_ls = {
           cmd = { 'lua-language-server' },
           filetypes = { 'lua' },
@@ -1138,8 +1178,11 @@ require('lazy').setup({
       --  and try some other statusline plugin
       local statusline = require 'mini.statusline'
       -- set use_icons to true if you have a Nerd Font
-      statusline.setup { use_icons = vim.g.have_nerd_font }
+      statusline.setup {
+        use_icons = vim.g.have_nerd_font,
+      }
 
+      -- statusline.combine_groups = true
       -- You can configure sections in the statusline by overriding their
       -- default behavior. For example, here we set the section for
       -- cursor location to LINE:COLUMN
@@ -1147,11 +1190,12 @@ require('lazy').setup({
       statusline.section_location = function()
         return '%2l:%-2v'
       end
-
-      -- ... and there is more!
-      --  Check out: https://github.com/echasnovski/mini.nvim
     end,
+    --
+    -- ... and there is more!
+    --  Check out: https://github.com/echasnovski/mini.nvim
   },
+
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
