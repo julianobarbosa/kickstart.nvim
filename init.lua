@@ -361,7 +361,9 @@ require('lazy').setup({
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
     config = function()
-      require('chatgpt').setup()
+      require('chatgpt').setup {
+        api_key_cmd = 'pass azure/hypera/oai/idg-dev/token',
+      }
     end,
     dependencies = {
       'MunifTanjim/nui.nvim',
@@ -670,9 +672,179 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
+        ansiblels = {
+          settings = {
+            ansible = {
+              ansible = {
+                path = 'ansible',
+              },
+            },
+          },
+        },
+
+        azure_pipelines_ls = {
+          settings = {
+            yaml = {
+              schemas = {
+                ['https://raw.githubusercontent.com/microsoft/azure-pipelines-vscode/master/service-schema.json'] = {
+                  '/azure-pipeline*.y*l',
+                  '/*.azure*',
+                  'Azure-Pipelines/**/*.y*l',
+                  'Pipelines/*.y*l',
+                },
+              },
+              format = {
+                enable = true,
+              },
+            },
+            azurePipelines = {
+              lint = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
+
+        bashls = {
+          filetypes = { 'sh', 'zsh' },
+          settings = {
+            bash = {
+              lint = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
+
+        bicep = {
+          settings = {
+            bicep = {
+              linting = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
+
         clangd = {},
-        pyright = {},
-        ruff = {},
+        -- -- jedi lsp server
+        -- -- See `:help nvim-lspconfig` for more information about the configuration
+        -- -- of the servers
+        -- jedi_language_server = {
+        --   cmd = { 'jedi-language-server' },
+        --   filetypes = { 'python' },
+        --   capabilities = {
+        --     completionProvider = { triggerCharacters = { '.', ':' } },
+        --   },
+        -- },
+
+        dockerls = {
+          settings = {
+            docker = {
+              lint = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
+
+        html = {
+          settings = {
+            html = {
+              format = {
+                enable = true,
+              },
+            },
+          },
+        },
+
+        jsonls = {
+          settings = {
+            json = {
+              format = {
+                enable = true,
+              },
+            },
+          },
+        },
+
+        powershell_es = {
+          cmd = {
+            'pwsh',
+            '-NoLogo',
+            '-NoProfile',
+            '-Command',
+            'Invoke-ScriptAnalyzer -Settings $HOME/.config/powershell/ScriptAnalyzerSettings.psd1 -EnableExit -Path $PWD',
+          },
+          settings = {
+            powershell = {
+              lint = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
+
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pycodestyle = {
+                  enabled = true,
+                  ignore = { 'E391' },
+                  maxLineLength = 100,
+                },
+                pyflakes = { enabled = false },
+                pylint = { enabled = false },
+                yapf = { enabled = false },
+                isort = { enabled = true },
+                mypy = { enabled = true },
+              },
+            },
+          },
+        },
+
+        -- python lsp server (pyright)
+        -- See `:help nvim-lspconfig` for more information about the configuration
+        -- of the servers
+        pyright = {
+          settings = {
+            python = {
+              -- linting = {
+              --   enabled = true,
+              --   pylintEnabled = false,
+              --   flake8Enabled = true,
+              --   pylintPath = 'pylint',
+              --   flake8Path = 'flake8',
+              --   mypyEnabled = true,
+              --   mypyPath = 'mypy',
+              -- },
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+              formatting = {
+                provider = 'ruff_format',
+              },
+            },
+          },
+        },
+        ruff = {
+          init_options = {
+            settings = {
+              configuration = '~/.ruff.toml',
+              lint = {
+                enable = true,
+                severity = 'error',
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -723,6 +895,7 @@ require('lazy').setup({
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'ansible-language-server',
         'azure-pipelines-language-server',
         'autoflake',
         'autopep8',
@@ -735,9 +908,11 @@ require('lazy').setup({
         'codelldb',
         'codespell',
         'debugpy',
+        'docker-compose-language-service',
         'dockerfile-language-server',
         'helm-ls',
         'html-lsp',
+        'jedi-language-server',
         'jq',
         'json-lsp',
         'jsonlint',
@@ -747,7 +922,8 @@ require('lazy').setup({
         'powershell-editor-services',
         'prettier',
         'pyright',
-        'ruff',
+        'python-lsp-server',
+        'ruff-lsp',
         'rust-analyzer',
         'shellcheck',
         'stylua', -- Used to format lua code
