@@ -777,6 +777,9 @@ require('lazy').setup({
           },
         },
 
+        -- marksman = {},
+        markdown_oxide = {},
+
         powershell_es = {
           cmd = {
             'pwsh',
@@ -926,6 +929,8 @@ require('lazy').setup({
         'jsonlint',
         'jsonnet-language-server',
         'lua-language-server',
+        'marksman',
+        'markdown_oxide',
         'mypy',
         'powershell-editor-services',
         'prettier',
